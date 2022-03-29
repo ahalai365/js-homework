@@ -4,7 +4,7 @@ let block = [];
 
 function createAnyBlock(value, amount) {
   for (let i = 0; i < amount; i++) {
-  block.push(value);  
+    block.push(value);  
   }
 }
 
