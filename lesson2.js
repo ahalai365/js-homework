@@ -8,35 +8,12 @@ console.log(
 function map2 (massive, change) {
   let newMassive = [];
   for (let i = 0; i < massive.length; i++) {
-  	newMassive.push(massive[i]);
-    newMassive[i] = newMassive[i] + change;
-}
+    newMassive.push(change(massive[i])) 
+	}
   return newMassive
-};
-
-console.log(map2 ([1, 2, 3], 2)); // Для остальных знаков тоже самое только нужно поменять знак
-
-// Должно быть так?
-function map(inputArray, action) {
-  const result = [];
-
-  for (let i = 0; i < inputArray.length; i += 1) {
-    const currentElement = inputArray[i];
-    const newElement = change(currentElement, action);
-    
-    result.push(newElement);
-  }
-
-  return result;
 }
 
-function change(currentElement, action) {
-  const newElement = currentElement + action;
-  
-  return newElement
-}
-
-console.log(map([1, 2, 3], 3));
+console.log(map2 ([1, 2, 3], function(element) { return element + 2 }));
 
 // forEach - просто проходит по массиву и передает каждый элемент в функцию
 // принимает массив и функцию преобразователь; не возвращает ничего
@@ -45,13 +22,13 @@ console.log(map([1, 2, 3], 3));
   console.log(element);
 })
 
-function forEach2 (massive) {
+function forEach2 (massive, looker) {
 	for (let i = 0; i < massive.length; i++) {
-  	let result = massive[i]
-    console.log(result);
+  	looker(massive[i]);
   }
 }
-forEach2 ([1, 2, 3]); // то что надо, но не понимаю как вевести по очереди каждое значение
+
+forEach2 ([1, 2, 3], function(element) { console.log(element) });
 
 // find - находит первый элемент, который удовлетворяет условию
 // принимает массив и функцию. Функция принимает элемент и отвечает boolean - подходит или нет.
@@ -64,13 +41,13 @@ console.log(
 
 function find2 (massive, find) {
   for (let i = 0; i < massive.length; i++) {
-    if (massive[i] === find) {
-      return massive[i];
+    if (find(massive[i])) {
+     return massive[i];
     }
   }
-};
+}
 
-console.log(find2([1, 2, 3], 2));
+console.log(find2([1, 2, 3], function(element) { return element === 1 }));
 
 // filter - создает новый массив, в который кладет только те элементы, которые удовлетворяют условию
 // принимает массив и функцию. Функция принимает элемент и отвечает boolean - подходит или нет.
@@ -80,17 +57,17 @@ console.log(
   [1, 2, 3, 4].filter(function(element) { return element % 2 === 0 })
 )
 
-function filter(massive) {
-  let filtered = []
+function filter(massive, filtered) {
+  let newMassive = [];
   for (let i = 0; i < massive.length; i++) {
-  	if (massive[i] % 2 === 0) {
-    	filtered.push(massive[i])  
-    }  
-  }
-  return filtered
+    if (filtered(massive[i])) {
+    	newMassive.push(massive[i])  
+    }
+	}
+  return newMassive
 }
 
-console.log(filter([1, 2, 3, 4])); //не получалось передать выражение в аргумент, можно ли так?
+console.log(filter([1, 2, 3, 4], function(element) { return element % 2 === 0 }));
 
 // some - отвечает на вопрос "есть ли хоть один элемент, удовлетворяющий условию"
 // принимает массив и функцию. Функция принимает элемент и отвечает boolean - подходит или нет.
@@ -100,19 +77,17 @@ console.log(
   [1, 2, 3].some(function(element) { return element % 2 === 0 })
 )
 
-function some2(massive) {
+function some2(massive, checkElement) {
+  let result = false;
   for (let i = 0; i < massive.length; i++) {
-  	if (massive[i] % 2 === 0) {
-    	return true;
-    } else {
-      if (i === (massive.length - 1)) {
-        return false;
-      }
-    } 
-  }
+    if (checkElement(massive[i])) {
+    	return result = true;
+    }
+	}
+  return result
 }
 
-console.log(some2([1, 2, 3]));
+console.log(some2([1, 2, 3], function(element) { return element % 2 === 0 }));
 
 // every - отвечает на вопрос "каждый ли элемент удовлетворяет условию?"
 // принимает массив и функцию. Функция принимает элемент и отвечает boolean - подходит или нет.
@@ -122,20 +97,16 @@ console.log(
   [2, 2, 5].every(function(element) { return element % 2 === 0 })
 )
 
-function every2(massive, value) {
-  let result
+function every2(massive, checkElement) {
+  let result = false;
   for (let i = 0; i < massive.length; i++) {
-    
-  	if (massive[i] === value) {
-      result = true
+    if (checkElement(massive[i])) {
+    	result = true;
     } else {
       return result = false
-   }  
-    
-  }
+    }
+	}
   return result
 }
 
-function someDo (value)
-
-console.log(every2([2, 2, 5], 2));
+console.log(every2([2, 2, 5], function(element) { return element % 2 === 0 }));
